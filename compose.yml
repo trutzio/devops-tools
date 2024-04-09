@@ -13,6 +13,7 @@ services:
     volumes:
       - grafana-storage:/var/lib/grafana
       - ./src/main/docker/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+      - ./src/main/docker/grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
     depends_on:
       - prometheus
 volumes:
