@@ -12,7 +12,7 @@ services:
       - ./src/main/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
   tempo:
     image: grafana/tempo
-    user: "0:0"
+    user: "0:0" # wichtig, da sich der Container sonst nicht starten lässt
     command: 
       - "-config.file"
       - "/etc/tempo.yml"
