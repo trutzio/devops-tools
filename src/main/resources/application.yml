@@ -1,6 +1,14 @@
 spring:
     application:
         name: devops-tools
+    datasource:
+        url: jdbc:postgresql://localhost:5432/postgres
+        username: postgres
+        password: postgres
+    jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            ddl-auto: update
 management:
     tracing:
         enabled: true
