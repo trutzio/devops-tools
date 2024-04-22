@@ -3,6 +3,8 @@ package trutzio.devopstools;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+
 @RestController
 public class PersonController {
 
@@ -13,7 +15,7 @@ public class PersonController {
     }
 
     @GetMapping("/")
-    // @WithSpan(value = "test span")
+    @WithSpan("test span")
     public String newPerson() throws InterruptedException {
         Person person = new Person();
         person.name = "John Doe";

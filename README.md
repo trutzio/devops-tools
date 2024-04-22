@@ -14,3 +14,6 @@ docker push ghcr.io/trutzio/devops-tools:latest
 ```sh
 java -javaagent:"opentelemetry-javaagent.jar" -jar .\target\devops-tools-0.0.1-SNAPSHOT.jar
 ```
+
+## Instrumentation without `@WithSpan`
+`$env:OTEL_INSTRUMENTATION_METHODS_INCLUDE="my.package.ClassName[method];my.package.ClassName2[method2]"`
