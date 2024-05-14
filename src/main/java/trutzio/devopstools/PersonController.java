@@ -15,7 +15,7 @@ public class PersonController {
     }
 
     @GetMapping("/")
-    @WithSpan("test span")
+    @WithSpan
     public String newPerson() throws InterruptedException {
         Person person = new Person();
         person.name = "John Doe";
