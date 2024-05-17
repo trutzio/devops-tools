@@ -12,6 +12,7 @@ spring:
     flyway:
         baseline-on-migrate: false
         out-of-order: false
+        validate-on-migrate: true
 management:
     tracing:
         enabled: true
