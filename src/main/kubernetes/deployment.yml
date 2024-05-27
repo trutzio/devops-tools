@@ -13,10 +13,32 @@ metadata:
 data:
   application-namespace.yaml: |
     spring:
+      application:
+        name: devops-tools
       datasource:
         url: jdbc:postgresql://testpod:5432/postgres
         username: postgres
         password: ${password}
+      jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+            ddl-auto: update
+      flyway:
+          baseline-on-migrate: false
+          out-of-order: false
+          validate-on-migrate: true
+    management:
+      tracing:
+          enabled: true
+      endpoints:
+          web:
+              exposure:
+                  include: "health,prometheus,env"
+    otel:
+      logs:
+          exporter: none
+      metrics:
+          exporter: none
   application-lob.yaml: |
     spring:
       datasource:
@@ -35,15 +57,15 @@ spec:
     envFrom:
     - secretRef:
         name: testsecret
+    env:
+    - name: spring.config.name
+      value: myconfig
     volumeMounts:
     - name: application-config-namespace
       mountPath: /workspace/config/1_namespace
       readOnly: true
     - name: application-config-lob
       mountPath: /workspace/config/2_lob
-      readOnly: true
-    - name: application-secrets
-      mountPath: /workspace/config/3_secrets
       readOnly: true
   - name: postgres-db
     image: postgres:16
@@ -62,13 +84,10 @@ spec:
       name: testcm
       items:
         - key: application-namespace.yaml
-          path: application.yaml
+          path: myconfig.yaml
   - name: application-config-lob
     configMap:
       name: testcm
       items:
         - key: application-lob.yaml
-          path: application.yaml
-  - name: application-secrets
-    secret:
-      secretName: testsecret
+          path: myconfig.yaml
