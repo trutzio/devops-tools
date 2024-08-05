@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: testcm1
+data:
+  foo: bar1
+  bar: foo1
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: testcm2
+data:
+  foo: bar2
+  bar: foo2
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: busybox
+  namespace: default
+spec:
+  containers:
+  - name: busybox
+    image: busybox:stable
+    command:
+    - sleep
+    - "3600"
+    envFrom: # die Reihenfolge wird in minikube beachtet, ENV Variablen werden überschrieben
+    - configMapRef:
+        name: testcm2
+    - configMapRef:
+        name: testcm1
+    env: # dieser Eintrag überschreibt die obigen envFrom Einträge
+    - name: foo
+      value: bar
