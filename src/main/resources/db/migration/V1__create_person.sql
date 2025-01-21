@@ -1,1 +1,1 @@
-create table person(id int);
+create table test(id int);

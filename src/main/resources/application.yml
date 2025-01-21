@@ -1,3 +1,6 @@
+logging:
+    level:
+        io.opentelemetry.instrumentation: ERROR
 spring:
     application:
         name: devops-tools

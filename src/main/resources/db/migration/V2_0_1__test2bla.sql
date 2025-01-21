@@ -1,1 +1,2 @@
-select * from person;
+select * from test;
+
