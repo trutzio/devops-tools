@@ -1,6 +1,8 @@
 logging:
     level:
-        io.opentelemetry.instrumentation: ERROR
+        io:
+            opentelemetry:
+                exporter: WARN
 spring:
     application:
         name: devops-tools
@@ -9,24 +11,17 @@ spring:
         username: postgres
         password: postgres
     jpa:
-        database-platform: org.hibernate.dialect.PostgreSQLDialect
         hibernate:
             ddl-auto: update
+        open-in-view: false
     flyway:
         baseline-on-migrate: false
         out-of-order: false
         validate-on-migrate: true
 management:
-    tracing:
-        enabled: true
     endpoints:
         web:
             exposure:
                 include: "health,prometheus,env"
-otel:
-    logs:
-        exporter: none
-    metrics:
-        exporter: none
 
                 
