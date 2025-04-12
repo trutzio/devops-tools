@@ -2,6 +2,7 @@ package trutzio.devopstools;
 
 import java.util.List;
 
+import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,6 +18,8 @@ public class PersonController {
 
     private final EntityManager entityManager;
 
+    private final Logger logger = org.slf4j.LoggerFactory.getLogger(PersonController.class);
+
     public PersonController(PersonRepository personRepository, EntityManager entityManager, AddressRepository addressRepository) {
         this.personRepository = personRepository;
         this.addressRepository = addressRepository;
@@ -26,9 +29,11 @@ public class PersonController {
     @GetMapping("/")
     @WithSpan
     public String newPerson() throws InterruptedException {
-        Person person = new Person();
+        var person = new Person();
         person.name = "John Doe";
-        return personRepository.save(person).id.toString();
+        person = personRepository.save(person);
+        logger.info("Person saved: {}", person);
+        return person.id.toString();
     }
 
     @GetMapping("/detach")

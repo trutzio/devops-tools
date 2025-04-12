@@ -18,13 +18,13 @@ services:
     volumes:
       - ./src/main/docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
   jaeger:
-    image: jaegertracing/jaeger:2.5.0
+    image: jaegertracing/jaeger
     ports:
       - "4317:4317" # otlp grpc
       - "4318:4318" # otlp http
       - "16686:16686"
-      - "5778:5778"
-      - "9411:9411"
+      #- "5778:5778"
+      #- "9411:9411"
   grafana:
     image: grafana/grafana-enterprise
     ports:
@@ -35,4 +35,19 @@ services:
     depends_on:
       - prometheus
       - jaeger
+  otel-collector:
+    image: otel/opentelemetry-collector-contrib
+    profiles:
+      - collector
+    volumes:
+      - ./src/main/docker/otel-collector/config.yaml:/etc/otelcol-contrib/config.yaml
+    ports:
+      - 8888:8888 # Prometheus metrics exposed by the Collector
+      - 8889:8889 # Prometheus exporter metrics
+      - 1777:1777 # pprof extension
+      - 13133:13133 # health_check extension
+      - 55679:55679 # zpages extension
+      - 4317:4317 # OTLP gRPC receiver
+      - 4318:4318 # OTLP http receiver
+      
     
