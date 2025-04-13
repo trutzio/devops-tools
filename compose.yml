@@ -7,6 +7,11 @@ services:
       POSTGRES_DB: postgres
     ports:
       - 5432:5432
+  loki:
+    image: grafana/loki
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
   prometheus:
     image: prom/prometheus
     command:
@@ -20,13 +25,17 @@ services:
   jaeger:
     image: jaegertracing/jaeger
     ports:
-      - "4317:4317" # otlp grpc
-      - "4318:4318" # otlp http
+      - "4319:4317" # otlp grpc
+      - "4320:4318" # otlp http
       - "16686:16686"
       #- "5778:5778"
       #- "9411:9411"
   grafana:
     image: grafana/grafana-enterprise
+    environment:
+      - GF_AUTH_ANONYMOUS_ENABLED=true
+      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+      - GF_FEATURE_TOGGLES_ENABLE=alertingSimplifiedRouting,alertingQueryAndExpressionsStepMode
     ports:
       - 3000:3000
     volumes:
@@ -35,10 +44,9 @@ services:
     depends_on:
       - prometheus
       - jaeger
+      - loki
   otel-collector:
     image: otel/opentelemetry-collector-contrib
-    profiles:
-      - collector
     volumes:
       - ./src/main/docker/otel-collector/config.yaml:/etc/otelcol-contrib/config.yaml
     ports:
@@ -49,5 +57,9 @@ services:
       - 55679:55679 # zpages extension
       - 4317:4317 # OTLP gRPC receiver
       - 4318:4318 # OTLP http receiver
+    depends_on:
+      - prometheus
+      - jaeger
+      - loki
       
     

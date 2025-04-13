@@ -10,20 +10,28 @@ processors:
 exporters:
   debug:
     verbosity: detailed
+  loki:
+    endpoint: http://loki:3100/loki/api/v1/push
+  prometheus:
+    endpoint: "0.0.0.0:8889"
+  otlp/jaeger:
+    endpoint: jaeger:4317
+    tls:
+      insecure: true
 service:
   pipelines:
     traces:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [otlp/jaeger]
     metrics:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [prometheus]
     logs:
       receivers: [otlp]
       processors: [batch]
-      exporters: [debug]
+      exporters: [loki]
   extensions: [health_check, pprof, zpages]
 extensions:
   health_check: 
