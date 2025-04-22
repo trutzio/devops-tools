@@ -10,3 +10,9 @@ docker push ghcr.io/trutzio/devops-tools:latest
 
 - `@WithSpan` on any desired method
 - without `@WithSpan` `$env:OTEL_INSTRUMENTATION_METHODS_INCLUDE="my.package.ClassName[method];my.package.ClassName2[method2]"`
+
+## Start penetration
+
+```shell
+docker run --rm ricoli/hey -n 1 -c 1 http://host.docker.internal:8080/dice
+```
